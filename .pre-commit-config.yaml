@@ -15,11 +15,6 @@ repos:
       - id: check-added-large-files
         args:
           - --enforce-all
-        exclude: |-
-          (?x)^(
-            docs/_static/.*\.png|
-            examples/.*\.ipynb
-          )$
       - id: check-case-conflict
       - id: check-merge-conflict
       - id: check-symlinks
@@ -42,6 +37,46 @@ repos:
     hooks:
       - id: yamllint
         args:
+          - >-
+            --config-data={
+              extends: default,
+              rules: {
+                anchors: enable,
+                braces: {
+                  forbid: non-empty
+                },
+                brackets: {
+                  forbid: non-empty
+                },
+                colons: enable,
+                commas: enable,
+                comments: {
+                  min-spaces-from-content: 1
+                },
+                comments-indentation: enable,
+                document-end: disable,
+                document-start: enable,
+                empty-lines: enable,
+                empty-values: disable,
+                float-values: enable,
+                hyphens: enable,
+                indentation: enable,
+                key-duplicates: enable,
+                key-ordering: disable,
+                line-length: enable,
+                new-line-at-end-of-file: enable,
+                new-lines: enable,
+                octal-values: enable,
+                quoted-strings: {
+                  quote-type: double,
+                  required: only-when-needed
+                },
+                trailing-spaces: enable,
+                truthy: {
+                  check-keys: false
+                }
+              }
+            }
           - --strict
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.13.3

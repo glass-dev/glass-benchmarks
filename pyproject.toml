@@ -29,8 +29,6 @@ license.text = "MIT License"
 build.hooks.vcs.version-file = "tests/_version.py"
 build.targets.sdist.exclude = [
     ".*",
-    "docs/*",
-    "examples/*",
     "noxfile.py",
     "tests/*",
 ]
@@ -46,13 +44,6 @@ enable_error_code = [
 explicit_package_bases = true
 strict = true
 warn_unreachable = true
-
-[[tool.mypy.overrides]]
-disable_error_code = [
-    "arg-type",
-    "assignment",
-]
-module = "tests.*"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -75,20 +66,12 @@ xfail_strict = true
 fix = true
 force-exclude = true
 show-fixes = true
-# src = [
-# "tests",
-# ]
-lint.allowed-confusables = [
-    "α",
-    "γ",
-]
 lint.future-annotations = true
 lint.ignore = [
     "COM812", # missing-trailing-comma (ruff-format recommended)
     "D203", # one-blank-line-before-class
     "D212", # blank-line-before-class
     "ISC001", # single-line-implicit-string-concatenation (ruff-format recommended)
-    "RUF003", # ambiguous-unicode-character-comment
 ]
 lint.isort = {known-first-party = [
     "glass",
@@ -110,41 +93,11 @@ lint.isort = {known-first-party = [
     "camb",
     "cosmology",
 ]}}
-lint.per-file-ignores = {"__init__.py" = [
-    "F401", # unused-import
-], "docs*" = [
+lint.per-file-ignores = {"tests*" = [
     "D100", # undocumented-public-module
-    "INP001", # implicit-namespace-package,
-], "examples*" = [
-    "ANN001", # missing-type-function-argument
-    "ANN002", # missing-type-args
-    "ANN201", # missing-return-type-undocumented-public-function
-    "D103", # undocumented-public-function
-    "PLR2004", # magic-value-comparison
-    "T201", # print
-], "glass*" = [
-    "D205", # missing-blank-line-after-summary
-    "D401", # non-imperative-mood
-    "EM101", # raw-string-in-exception
-    "EM102", # f-string-in-exception
-    "PLR2004", # TODO: magic-value-comparison
-    "TRY003", # raise-vanilla-args
-], "glass/grf/_*" = [
-    "SLF001", # private-member-access
-], "noxfile.py" = [
-    "T201", # print
-], "tests*" = [
-    "ANN001", # missing-type-function-argument
-    "ANN201", # missing-return-type-undocumented-public-function
-    "ANN202", # missing-return-type-private-function
-    "D100", # undocumented-public-module
-    "D103", # TODO: undocumented-public-function
-    "D104", # undocumented-public-package
     "INP001", # implicit-namespace-package
-    "PLC0415", # import-outside-top-level
     "PLR2004", # magic-value-comparison
     "S101", # assert
-    "SLF001", # private-member-access
 ]}
 lint.select = [
     "ALL",
