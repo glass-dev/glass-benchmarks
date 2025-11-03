@@ -40,4 +40,4 @@ jobs:
           path: .nox
 
       - name: Run linting
-        run: nox -s lint
+        run: python -m nox -s lint
