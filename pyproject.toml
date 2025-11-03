@@ -7,8 +7,8 @@ requires = [
 
 [project]
 dependencies = [
-    "array_api_strict",
-    "jax",
+    "array_api_strict>=2",
+    "jax>=0.4.32",
     "numpy",
     "pytest",
     "pytest-benchmark",
