@@ -11,3 +11,6 @@ _build
 build
 coverage*
 dist
+.benchmarks
+*.egg-info
+uv.lock
