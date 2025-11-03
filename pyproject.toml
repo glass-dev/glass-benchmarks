@@ -93,7 +93,9 @@ lint.isort = {known-first-party = [
     "camb",
     "cosmology",
 ]}}
-lint.per-file-ignores = {"tests*" = [
+lint.per-file-ignores = {"noxfile.py" = [
+    "T201", # print
+], "tests*" = [
     "D100", # undocumented-public-module
     "INP001", # implicit-namespace-package
     "PLR2004", # magic-value-comparison

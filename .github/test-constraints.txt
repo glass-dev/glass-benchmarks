@@ -1,0 +1,10 @@
+numpy
+--only-binary numpy
+
+healpy
+--only-binary healpy
+
+healpix
+--only-binary healpix
+
+--prefer-binary
