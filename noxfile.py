@@ -21,6 +21,13 @@ BEFORE_REVISION = "main"
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
 
 
+@nox.session
+def lint(session: nox.Session) -> None:
+    """Run the linter."""
+    session.install("pre-commit")
+    session.run("pre-commit", "run", "--all-files", *session.posargs)
+
+
 @nox.session(python=ALL_PYTHON)
 def regression_tests(session: nox.Session) -> None:
     """Run the regression test."""
