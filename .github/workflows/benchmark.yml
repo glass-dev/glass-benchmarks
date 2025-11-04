@@ -2,6 +2,9 @@
 name: Run benchmark
 
 on:
+  push:
+    branches:
+      - connor/initial-setup
   workflow_dispatch:
     inputs:
       starting_revision:
