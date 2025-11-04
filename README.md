@@ -4,22 +4,16 @@ Benchmarks for [glass-dev/glass](https://github.com/glass-dev/glass).
 
 ## Running a benchmark
 
-To run a benchmark, first install the dependencies.
+To run a benchmark, first install nox.
 
 ```sh
-pip install -e . git+https://github.com/glass-dev/glass@<revision-to-benchmark>
+pip install nox
 ```
 
-Then run via pytest.
+Then run the benchmark via nox.
 
 ```sh
-pytest
-```
-
-If you want to save the output to a file...
-
-```sh
-pytest --benchmark-autosave
+nox run -s benchmark -- <revision-you-wish-to-benchmark>
 ```
 
 ## Regression tests
@@ -28,9 +22,11 @@ The benchmarks can be used to run a regression test of `glass`. To do this
 a nox test is provided in [noxfile.py](./noxfile.py). To run the test...
 
 ```sh
-BEFORE_REVISION=<initial-state-revision> \
-AFTER_REVISION=<revision-to-compare-to-initial-state> \
-nox -s regression-tests
+nox -s regression-tests -- <initial-state-revision> <revision-to-compare-to-initial-state>
 ```
 
-> Note: BEFORE_REVISION defaults to `main`
+If you want to compare to the initial state of main you can simply run.
+
+```sh
+nox -s regression-tests -- <revision-to-compare-to-main>
+```

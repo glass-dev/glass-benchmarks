@@ -1,7 +1,5 @@
 """Nox config."""
 
-import os
-
 import nox
 
 # Options to modify nox behaviour
@@ -17,7 +15,6 @@ ALL_PYTHON = [
     "3.12",
     "3.13",
 ]
-BEFORE_REVISION = "main"
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
 
 
@@ -29,22 +26,52 @@ def lint(session: nox.Session) -> None:
 
 
 @nox.session(python=ALL_PYTHON)
+def benchmark(session: nox.Session) -> None:
+    """Run the benchmarks."""
+    session.install("-e", ".")
+
+    revision = ""
+    if session.posargs:
+        args = session.posargs
+        if len(args) != 1:
+            msg = f"Incorrect number of revisions provided {len(args)}"
+            raise ValueError(msg)
+        revision = args[0]
+    else:
+        msg = "Revision not provided"
+        raise ValueError(msg)
+
+    # Verify revisions have been provided
+
+    print(f"Running benchmark for revision {revision}")
+    session.install(f"git+{GLASS_REPO_URL}@{revision}")
+    session.run("pytest", "--benchmark-autosave")
+
+
+@nox.session(python=ALL_PYTHON)
 def regression_tests(session: nox.Session) -> None:
     """Run the regression test."""
     session.install("-e", ".")
 
-    # Verify revisions have been provided
-    before_revision = os.environ.get("BEFORE_REVISION")
-    before_revision = before_revision if before_revision else "main"
-
-    after_revision = os.environ.get("AFTER_REVISION")
-    if not after_revision:
-        msg = "'AFTER_REVISION' not provided"
+    before_revision = "main"
+    after_revision = ""
+    if session.posargs:
+        revisions = session.posargs
+        if len(revisions) == 1:
+            after_revision = revisions[0]
+        elif len(revisions) == 2:  # noqa: PLR2004
+            before_revision = revisions[0]
+            after_revision = revisions[1]
+        else:
+            msg = f"Incorrect number of revisions provided {len(revisions)}"
+            raise ValueError(msg)
+    else:
+        msg = "No revisions not provided"
         raise ValueError(msg)
 
-    print(f"Generating before benchmark for comparison from revision {BEFORE_REVISION}")
-    session.install(f"git+{GLASS_REPO_URL}@{BEFORE_REVISION}")
-    session.run("pytest", "--benchmark-autosave", *session.posargs)
+    print(f"Generating before benchmark for comparison from revision {before_revision}")
+    session.install(f"git+{GLASS_REPO_URL}@{before_revision}")
+    session.run("pytest", "--benchmark-autosave")
 
     print(f"Comparing before benchmark to revisiob {after_revision}")
     session.install(f"git+{GLASS_REPO_URL}@{after_revision}")
@@ -52,5 +79,4 @@ def regression_tests(session: nox.Session) -> None:
         "pytest",
         "--benchmark-compare=0001",
         "--benchmark-compare-fail=min:5%",
-        *session.posargs,
     )
