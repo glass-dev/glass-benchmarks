@@ -22,11 +22,11 @@ The benchmarks can be used to run a regression test of `glass`. To do this
 a nox test is provided in [noxfile.py](./noxfile.py). To run the test...
 
 ```sh
-nox -s regression-tests -- <initial-state-revision> <revision-to-compare-to-initial-state>
+nox run -s regression-tests -- <initial-state-revision> <revision-to-compare-to-initial-state>
 ```
 
 If you want to compare to the initial state of main you can simply run.
 
 ```sh
-nox -s regression-tests -- <revision-to-compare-to-main>
+nox run -s regression-tests -- <revision-to-compare-to-main>
 ```

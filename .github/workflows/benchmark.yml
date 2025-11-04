@@ -53,15 +53,11 @@ jobs:
             }}-${{ env.pythonLocation }}
           path: .nox
 
-      - name: Generate starting state benchmark
-        run: nox -s regression-tests
-        env:
-          STARTING_REVISION: ${{ inputs.starting_revision }}
+      - name: Install nox
+        run: python -m pip install nox
 
       - name: Run regression test
-        run: >-
-          python -m pip install . "git+$GLASS_REPO_URL@$END_REVISION";
-          python -m pytest --benchmark-compare=0001
-          --benchmark-compare-fail=min:5%
+        run: nox run -s regression_tests -- $STARTING_REVISION $END_REVISION
         env:
+          STARTING_REVISION: ${{ inputs.starting_revision }}
           END_REVISION: ${{ inputs.end_revision }}
