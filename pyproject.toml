@@ -6,7 +6,6 @@ requires = ["setuptools"]
 dependencies = [
     "array_api_strict>=2",
     "jax>=0.4.32",
-    "numpy",
     "pytest",
     "pytest-benchmark",
 ]
