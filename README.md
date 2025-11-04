@@ -28,8 +28,8 @@ The benchmarks can be used to run a regression test of `glass`. To do this
 a nox test is provided in [noxfile.py](./noxfile.py). To run the test...
 
 ```sh
-export BEFORE_REVISION=<initial-state-revision>
-export AFTER_REVISION=<revision-to-compare-to-initial-state>
+BEFORE_REVISION=<initial-state-revision> \
+AFTER_REVISION=<revision-to-compare-to-initial-state> \
 nox -s regression-tests
 ```
 

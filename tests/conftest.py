@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import jax.numpy as jnp
-import numpy as np
+import jax.numpy
+import numpy  # noqa: ICN001
 import pytest
 
 import array_api_strict
@@ -13,8 +13,8 @@ if TYPE_CHECKING:
 
 xp_available_backends: dict[str, ModuleType] = {
     "array_api_strict": array_api_strict,
-    "numpy": np,
-    "jax.numpy": jnp,
+    "numpy": numpy,
+    "jax.numpy": jax.numpy,
 }
 
 
