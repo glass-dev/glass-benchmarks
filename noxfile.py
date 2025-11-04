@@ -15,6 +15,12 @@ ALL_PYTHON = [
     "3.12",
     "3.13",
 ]
+DEPENDENCIES = [
+    "array_api_strict>=2",
+    "jax>=0.4.32",
+    "pytest",
+    "pytest-benchmark",
+]
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
 
 
@@ -28,7 +34,7 @@ def lint(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def benchmark(session: nox.Session) -> None:
     """Run the benchmarks."""
-    session.install("-e", ".")
+    session.install(*DEPENDENCIES)
 
     revision = ""
     if session.posargs:
@@ -51,7 +57,7 @@ def benchmark(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def regression_tests(session: nox.Session) -> None:
     """Run the regression test."""
-    session.install("-e", ".")
+    session.install(*DEPENDENCIES)
 
     before_revision = "main"
     after_revision = ""
