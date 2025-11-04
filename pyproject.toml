@@ -15,7 +15,9 @@ dynamic = [
     "version",
 ]
 maintainers = [
+    {email = "c.aird@ucl.ac.uk", name = "Connor Aird"},
     {email = "n.tessore@ucl.ac.uk", name = "Nicolas Tessore"},
+    {email = "patrick.roddy@ucl.ac.uk", name = "Patrick Roddy"},
 ]
 name = "glass-benchmarks"
 readme = "README.md"
