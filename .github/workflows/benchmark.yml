@@ -18,9 +18,6 @@ on:
         required: true
         type: string
 
-env:
-  GLASS_REPO_URL: https://github.com/glass-dev/glass
-
 jobs:
   regression-test:
     name: Regression test
