@@ -57,7 +57,7 @@ jobs:
         run: python -m pip install nox
 
       - name: Run regression test
-        run: nox run -s regression_tests -- $STARTING_REVISION $END_REVISION
+        run: nox -s regression_tests -- $STARTING_REVISION $END_REVISION
         env:
           STARTING_REVISION: ${{ inputs.starting_revision }}
           END_REVISION: ${{ inputs.end_revision }}
