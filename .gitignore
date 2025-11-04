@@ -1,0 +1,15 @@
+*.html
+.*.swp
+.*_cache
+.coverage*
+.DS_Store
+.env
+.ipynb_checkpoints
+.jupyter
+__pycache__
+_build
+build
+coverage*
+dist
+.benchmarks
+*.egg-info
