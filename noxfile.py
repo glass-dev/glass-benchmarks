@@ -31,7 +31,7 @@ def lint(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def regression_tests(session: nox.Session) -> None:
     """Run the regression test."""
-    session.install("-c", ".github/test-constraints.txt", "-e", ".")
+    session.install("-e", ".")
 
     # Verify revisions have been provided
     before_revision = os.environ.get("BEFORE_REVISION")

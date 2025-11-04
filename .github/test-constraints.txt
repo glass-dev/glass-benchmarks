@@ -1,4 +1,0 @@
-numpy
---only-binary numpy
-
---prefer-binary
