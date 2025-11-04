@@ -13,4 +13,3 @@ coverage*
 dist
 .benchmarks
 *.egg-info
-uv.lock
