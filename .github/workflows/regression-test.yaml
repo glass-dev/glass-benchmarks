@@ -38,22 +38,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          cache-dependency-path: pyproject.toml
           cache: pip
           python-version: ${{ matrix.python-version }}
 
       - name: Cache nox
         uses: actions/cache@v4
         with:
-          key:
-            tests-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('noxfile.py')
-            }}-${{ env.pythonLocation }}
+          key: tests-${{ hashFiles('noxfile.py') }}-${{ env.pythonLocation }}
           path: .nox
 
       - name: Install nox
         run: python -m pip install nox
 
       - name: Run regression test
-        run: |
-          nox -s regression_tests -- \
-            ${{ inputs.starting_revision }} ${{ inputs.end_revision }}
+        run: >-
+          nox -s regression_tests-${{ matrix.python-version }} --
+          ${{ inputs.starting_revision }} ${{ inputs.end_revision }}
