@@ -2,6 +2,20 @@
 name: Run regression test
 
 on:
+  workflow_call:
+    inputs:
+      starting_revision:
+        description: >-
+          The hash for the revision of glass-dev/glass to act as the starting
+          state to be compared against.
+        default: main
+        type: string
+      end_revision:
+        description: >-
+          The hash for the revision of glass-dev/glass to act as the final
+          state to be compared with the initial.
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       starting_revision:
