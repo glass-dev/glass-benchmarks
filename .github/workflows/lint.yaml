@@ -14,7 +14,7 @@ on:
 
 jobs:
   lint:
-    name: Regression test
+    name: Lint
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
