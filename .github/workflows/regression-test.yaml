@@ -55,5 +55,5 @@ jobs:
 
       - name: Run regression test
         run: |
-          nox -s regression_tests -- \
+          nox -s regression_tests-${{ matrix.python-version }} -- \
             ${{ inputs.starting_revision }} ${{ inputs.end_revision }}
