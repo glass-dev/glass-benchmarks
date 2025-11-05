@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - "**/*.py"
-      - ".github/workflows/regression-test.yaml"
+      - .github/workflows/regression-test.yaml
   workflow_dispatch:
 
 jobs:
