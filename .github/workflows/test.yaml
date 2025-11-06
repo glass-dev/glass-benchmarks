@@ -47,6 +47,9 @@ jobs:
       - name: Run tests with every array backend and generate coverage report
         run: nox -s coverage-${{ matrix.python-version }} -- main
 
+      - name: Install coverage.py outside of nox to generate xml
+        run: python -m pip install coverage[toml]
+
       - name: Coveralls requires XML report
         run: coverage xml
 
