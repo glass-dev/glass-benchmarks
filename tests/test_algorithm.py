@@ -63,3 +63,34 @@ def test_cov_clip(
     if rtol is not None:
         h = xp.max(xp.linalg.eigvalsh(a))
         np.testing.assert_allclose(xp.linalg.eigvalsh(cov), h, rtol=1e-6)
+
+
+@pytest.mark.parametrize("tol", [None, 0.0001])
+def test_nearcorr(
+    xp: ModuleType,
+    benchmark: BenchmarkFixture,
+    tol: float | None,
+) -> None:
+    """
+    Benchmark test for glass.algorithm.nearcorr.
+
+    Parameterize over tol to ensure the most coverage possible.
+    """
+    # from Higham (2002)
+    a = xp.asarray(
+        [
+            [1.0, 1.0, 0.0],
+            [1.0, 1.0, 1.0],
+            [0.0, 1.0, 1.0],
+        ],
+    )
+    b = xp.asarray(
+        [
+            [1.0000, 0.7607, 0.1573],
+            [0.7607, 1.0000, 0.7607],
+            [0.1573, 0.7607, 1.0000],
+        ],
+    )
+
+    x = benchmark(glass.algorithm.nearcorr, a, tol=tol)
+    np.testing.assert_allclose(x, b, atol=0.0001)
