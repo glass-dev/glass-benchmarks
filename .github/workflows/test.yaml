@@ -29,6 +29,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Checkout glass-dev/glass to allow coveralls to pickup src
+      - name: Checkout source
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          repository: glass-dev/glass
+          path: glass
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -55,7 +63,7 @@ jobs:
         with:
           flag-name: run-${{ matrix.python-version }}
           parallel: true
-          base-path: glass/
+          base-path: glass/glass
 
   aggregate-tests:
     needs: test
