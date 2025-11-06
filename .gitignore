@@ -1,7 +1,7 @@
 *.html
 .*.swp
 .*_cache
-.coverage*
+.coverage
 .DS_Store
 .env
 .ipynb_checkpoints

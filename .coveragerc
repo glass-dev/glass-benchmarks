@@ -1,0 +1,10 @@
+[run]
+source_pkgs =
+    glass
+relative_files = True
+
+[paths]
+source =
+    glass
+    .nox/coverage-3-13/lib/python3.13/site-packages/glass
+    glass/glass
