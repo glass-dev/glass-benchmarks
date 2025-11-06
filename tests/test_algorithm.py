@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import numpy as np
 import pytest
 
 import glass.algorithm
@@ -12,6 +13,8 @@ if TYPE_CHECKING:
     from types import ModuleType
 
     from pytest_benchmark.fixture import BenchmarkFixture
+
+    from glass._types import UnifiedGenerator
 
 
 def test_nnls(xp: ModuleType, benchmark: BenchmarkFixture) -> None:
@@ -31,3 +34,32 @@ def test_nnls(xp: ModuleType, benchmark: BenchmarkFixture) -> None:
     y = a @ b
     res = benchmark(glass.algorithm.nnls, a, y)
     assert xp.linalg.vector_norm((a @ res) - y) < 1e-7
+
+
+@pytest.mark.parametrize("rtol", [None, 1.0])
+def test_cov_clip(
+    xp: ModuleType,
+    urng: UnifiedGenerator,
+    benchmark: BenchmarkFixture,
+    rtol: float | None,
+) -> None:
+    """
+    Benchmark test for glass.algorithm.cov_clip.
+
+    Parameterize over rtol to ensure the most coverage possible.
+    """
+    # prepare a random matrix
+    m = urng.random((4, 4))
+
+    # symmetric matrix
+    a = (m + m.T) / 2
+
+    # fix by clipping negative eigenvalues
+    cov = benchmark(glass.algorithm.cov_clip, a, rtol=rtol)
+
+    # make sure all eigenvalues are positive
+    assert xp.all(xp.linalg.eigvalsh(cov) >= 0)
+
+    if rtol is not None:
+        h = xp.max(xp.linalg.eigvalsh(a))
+        np.testing.assert_allclose(xp.linalg.eigvalsh(cov), h, rtol=1e-6)
