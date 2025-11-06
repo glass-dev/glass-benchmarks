@@ -29,25 +29,22 @@ def _get_revisions_from_posargs(
     posargs: list[str],
     expected_num_revisions: int,
 ) -> tuple[str, str]:
-    first_revision = ""
-    second_revision = ""
-    if posargs:
-        args = posargs
-        if len(args) == 1 and expected_num_revisions in {1, 2}:
-            first_revision = args[0]
-        elif len(args) == expected_num_revisions == 2:  # noqa: PLR2004
-            first_revision = args[0]
-            second_revision = args[1]
-        else:
-            msg = (
-                f"Incorrect number of revisions provided {len(args)}, "
-                f"expected {expected_num_revisions}"
-            )
-            raise ValueError(msg)
-    else:
+    if not posargs:
         msg = "Revision not provided"
         raise ValueError(msg)
-    return first_revision, second_revision
+
+    n = len(posargs)
+
+    if n == 1 and expected_num_revisions in {1, 2}:
+        return posargs[0], ""
+    if n == expected_num_revisions == 2:  # noqa: PLR2004
+        return posargs[0], posargs[1]
+
+    msg = (
+        f"Incorrect number of revisions provided ({n}), "
+        f"expected {expected_num_revisions}"
+    )
+    raise ValueError(msg)
 
 
 def _setup_tests(session: nox.Session) -> None:
@@ -75,7 +72,7 @@ def benchmark(session: nox.Session) -> None:
 def coverage(session: nox.Session) -> None:
     """Run tests and compute coverage of glass."""
     _setup_tests(session)
-    session.run("coverage", "run", "--source=glass", "-m", "pytest")
+    session.run("coverage", "run", "-m", "pytest")
 
 
 @nox.session(python=ALL_PYTHON)
