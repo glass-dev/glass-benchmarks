@@ -94,3 +94,22 @@ def test_nearcorr(
 
     x = benchmark(glass.algorithm.nearcorr, a, tol=tol)
     np.testing.assert_allclose(x, b, atol=0.0001)
+
+
+def test_cov_nearest(
+    xp: ModuleType,
+    urng: UnifiedGenerator,
+    benchmark: BenchmarkFixture,
+) -> None:
+    """Benchmark test for glass.algorithm.cov_nearest."""
+    # prepare a random matrix
+    m = urng.random((4, 4))
+
+    # symmetric matrix
+    a = xp.eye(4) + (m + m.T) / 2
+
+    # compute covariance
+    cov = benchmark(glass.algorithm.cov_nearest, a)
+
+    # make sure all eigenvalues are positive
+    assert xp.all(xp.linalg.eigvalsh(cov) >= 0)
