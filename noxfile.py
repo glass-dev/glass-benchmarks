@@ -53,10 +53,11 @@ def _get_revisions_from_posargs(
 
     n = len(posargs)
 
-    if n == required_num_revisions == 1:
-        return posargs[0], ""
-    if n == required_num_revisions == 2:  # noqa: PLR2004
-        return posargs[0], posargs[1]
+    if n == required_num_revisions:
+        if n == 1:
+            return posargs[0], ""
+        if n == 2:  # noqa: PLR2004
+            return posargs[0], posargs[1]
 
     msg = (
         f"Incorrect number of revisions provided ({n}), "
