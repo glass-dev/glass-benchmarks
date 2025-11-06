@@ -17,32 +17,50 @@ ALL_PYTHON = [
 ]
 DEPENDENCIES = [
     "array_api_strict>=2",
+    "coverage[toml]",
     "jax>=0.4.32",
     "pytest",
     "pytest-benchmark",
-    "coverage[toml]",
 ]
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
 
 
 def _get_revisions_from_posargs(
     posargs: list[str],
-    expected_num_revisions: int,
+    *,
+    required_num_revisions: int,
 ) -> tuple[str, str]:
+    """
+    Extract the before (and after) revisions from the session.posargs.
+
+    Parameters
+    ----------
+    posargs
+        The list of position args passed via the nox cli.
+    required_num_revisions
+        The number of revisions required to be provided via the cli.
+
+    Returns
+    -------
+    first_revision
+        The first revision provided by the user.
+    second_revision
+        The second revision provided by the user.
+    """
     if not posargs:
         msg = "Revision not provided"
         raise ValueError(msg)
 
     n = len(posargs)
 
-    if n == 1 and expected_num_revisions in {1, 2}:
+    if n == required_num_revisions == 1:
         return posargs[0], ""
-    if n == expected_num_revisions == 2:  # noqa: PLR2004
+    if n == required_num_revisions == 2:  # noqa: PLR2004
         return posargs[0], posargs[1]
 
     msg = (
         f"Incorrect number of revisions provided ({n}), "
-        f"expected {expected_num_revisions}"
+        f"expected {required_num_revisions}"
     )
     raise ValueError(msg)
 
@@ -50,7 +68,7 @@ def _get_revisions_from_posargs(
 def _setup_tests(session: nox.Session) -> None:
     """Install dependencies and extract revision."""
     session.install(*DEPENDENCIES)
-    revision = _get_revisions_from_posargs(session.posargs, 1)[0]
+    revision = _get_revisions_from_posargs(session.posargs, required_num_revisions=1)[0]
     session.install(f"git+{GLASS_REPO_URL}@{revision}")
 
 
@@ -80,7 +98,10 @@ def regression_tests(session: nox.Session) -> None:
     """Run the regression test."""
     session.install(*DEPENDENCIES)
 
-    before_revision, after_revision = _get_revisions_from_posargs(session.posargs, 2)
+    before_revision, after_revision = _get_revisions_from_posargs(
+        session.posargs,
+        required_num_revisions=2,
+    )
 
     print(f"Generating before benchmark for comparison from revision {before_revision}")
     session.install(f"git+{GLASS_REPO_URL}@{before_revision}")
