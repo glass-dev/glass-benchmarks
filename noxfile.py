@@ -20,8 +20,41 @@ DEPENDENCIES = [
     "jax>=0.4.32",
     "pytest",
     "pytest-benchmark",
+    "coverage[toml]",
 ]
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
+
+
+def _get_revisions_from_posargs(
+    posargs: list[str],
+    expected_num_revisions: int,
+) -> tuple[str, str]:
+    first_revision = ""
+    second_revision = ""
+    if posargs:
+        args = posargs
+        if len(args) == 1 and expected_num_revisions in {1, 2}:
+            first_revision = args[0]
+        elif len(args) == expected_num_revisions == 2:  # noqa: PLR2004
+            first_revision = args[0]
+            second_revision = args[1]
+        else:
+            msg = (
+                f"Incorrect number of revisions provided {len(args)}, "
+                f"expected {expected_num_revisions}"
+            )
+            raise ValueError(msg)
+    else:
+        msg = "Revision not provided"
+        raise ValueError(msg)
+    return first_revision, second_revision
+
+
+def _setup_tests(session: nox.Session) -> None:
+    """Install dependencies and extract revision."""
+    session.install(*DEPENDENCIES)
+    revision = _get_revisions_from_posargs(session.posargs, 1)[0]
+    session.install(f"git+{GLASS_REPO_URL}@{revision}")
 
 
 @nox.session
@@ -34,24 +67,15 @@ def lint(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def benchmark(session: nox.Session) -> None:
     """Run the benchmarks."""
-    session.install(*DEPENDENCIES)
-
-    revision = ""
-    if session.posargs:
-        args = session.posargs
-        if len(args) != 1:
-            msg = f"Incorrect number of revisions provided {len(args)}"
-            raise ValueError(msg)
-        revision = args[0]
-    else:
-        msg = "Revision not provided"
-        raise ValueError(msg)
-
-    # Verify revisions have been provided
-
-    print(f"Running benchmark for revision {revision}")
-    session.install(f"git+{GLASS_REPO_URL}@{revision}")
+    _setup_tests(session)
     session.run("pytest", "--benchmark-autosave")
+
+
+@nox.session(python=ALL_PYTHON)
+def coverage(session: nox.Session) -> None:
+    """Run tests and compute coverage of glass."""
+    _setup_tests(session)
+    session.run("coverage", "run", "--source=glass", "-m", "pytest")
 
 
 @nox.session(python=ALL_PYTHON)
@@ -59,21 +83,7 @@ def regression_tests(session: nox.Session) -> None:
     """Run the regression test."""
     session.install(*DEPENDENCIES)
 
-    before_revision = "main"
-    after_revision = ""
-    if session.posargs:
-        revisions = session.posargs
-        if len(revisions) == 1:
-            after_revision = revisions[0]
-        elif len(revisions) == 2:  # noqa: PLR2004
-            before_revision = revisions[0]
-            after_revision = revisions[1]
-        else:
-            msg = f"Incorrect number of revisions provided {len(revisions)}"
-            raise ValueError(msg)
-    else:
-        msg = "No revisions not provided"
-        raise ValueError(msg)
+    before_revision, after_revision = _get_revisions_from_posargs(session.posargs, 2)
 
     print(f"Generating before benchmark for comparison from revision {before_revision}")
     session.install(f"git+{GLASS_REPO_URL}@{before_revision}")
