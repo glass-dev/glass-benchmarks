@@ -3,12 +3,13 @@ report = {exclude_also = [
     "class \\w+\\(Protocol(\\[(\\w+, )*\\w+\\])?\\):", # protocol classes
     "if TYPE_CHECKING:", # type-checking imports
 ], omit = [
-    "glass/glass/_version.py",
+    "*/_version.py",
 ], skip_covered = false, sort = "cover"}
 run = {branch = true, parallel = false, source_pkgs = [
     "glass",
 ]}
 paths.source = [
+    "glass",
     "glass/glass",
     ".nox*/*/lib/python*/site-packages/glass",
 ]
