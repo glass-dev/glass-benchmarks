@@ -17,10 +17,10 @@ ALL_PYTHON = [
 ]
 DEPENDENCIES = [
     "array-api-strict>=2",
-    "coverage[toml]",
     "jax>=0.4.32",
     "pytest",
     "pytest-benchmark",
+    "pytest-cov",
 ]
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
 
@@ -57,9 +57,8 @@ def benchmark(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def coverage(session: nox.Session) -> None:
     """Run tests and compute coverage of glass."""
-    session.install(*DEPENDENCIES)
-    session.install("-e", "./glass")
-    session.run("coverage", "run", "-m", "pytest")
+    session.install(*DEPENDENCIES, "./glass")
+    session.run("pytest", "--cov")
 
 
 @nox.session(python=ALL_PYTHON)

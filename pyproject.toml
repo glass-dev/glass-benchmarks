@@ -3,17 +3,15 @@ report = {exclude_also = [
     "class \\w+\\(Protocol(\\[(\\w+, )*\\w+\\])?\\):", # protocol classes
     "if TYPE_CHECKING:", # type-checking imports
 ], omit = [
-    "glass/glass/_version.py",
-    "glass/noxfile.py",
+    "*/_version.py",
+    "*/noxfile.py",
 ], skip_covered = false, sort = "cover"}
-run = {branch = true, parallel = false, source = [
+run = {branch = true, parallel = false, source_pkgs = [
     "glass",
 ]}
 paths.glass = [
-    ".nox*/*/lib/python*/site-packages/glass",
-    ".venv/lib/python*/site-packages/glass/",
-    "glass",
     "glass/glass",
+    ".nox*/*/lib/python*/site-packages/glass",
 ]
 
 [tool.mypy]
@@ -94,6 +92,5 @@ all = true
 in_place = true
 spaces_indent_inline_array = 4
 trailing_comma_inline_array = true
-overrides."project.classifiers".inline_arrays = false
-overrides."tool.coverage.paths.source".inline_arrays = false
+overrides."tool.coverage.paths.glass".inline_arrays = false
 overrides."tool.ruff.lint.isort.section-order".inline_arrays = false

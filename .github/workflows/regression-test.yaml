@@ -69,3 +69,5 @@ jobs:
         run: >-
           nox -s regression_tests-${{ matrix.python-version }} --
           ${{ inputs.starting_revision }} ${{ inputs.end_revision }}
+        env:
+          FORCE_COLOR: 1
