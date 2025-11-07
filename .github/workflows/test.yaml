@@ -63,6 +63,7 @@ jobs:
         with:
           flag-name: run-${{ matrix.python-version }}
           parallel: true
+          base-path: glass
 
   aggregate-tests:
     needs: test
