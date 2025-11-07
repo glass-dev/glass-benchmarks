@@ -3,8 +3,7 @@ report = {exclude_also = [
     "class \\w+\\(Protocol(\\[(\\w+, )*\\w+\\])?\\):", # protocol classes
     "if TYPE_CHECKING:", # type-checking imports
 ], omit = [
-    "*/_version.py",
-    "*/noxfile.py",
+    "glass/glass/_version.py",
 ], skip_covered = false, sort = "cover"}
 run = {branch = true, parallel = false, source_pkgs = [
     "glass",
