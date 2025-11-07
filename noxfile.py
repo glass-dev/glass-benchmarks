@@ -16,7 +16,7 @@ ALL_PYTHON = [
     "3.13",
 ]
 DEPENDENCIES = [
-    "array_api_strict>=2",
+    "array-api-strict>=2",
     "coverage[toml]",
     "jax>=0.4.32",
     "pytest",
