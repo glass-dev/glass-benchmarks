@@ -2,14 +2,12 @@
 report = {exclude_also = [
     "class \\w+\\(Protocol(\\[(\\w+, )*\\w+\\])?\\):", # protocol classes
     "if TYPE_CHECKING:", # type-checking imports
+], omit = [
+    "glass/_version.py",
 ], skip_covered = true, sort = "cover"}
-run = {branch = true, parallel = true, source = [
-    "glass",
+run = {branch = true, parallel = false, source = [
+    "glass/glass",
 ]}
-paths.source = [
-    "glass",
-    ".nox*/*/lib/python*/site-packages/",
-]
 
 [tool.mypy]
 disallow_untyped_decorators = false

@@ -90,7 +90,8 @@ def benchmark(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def coverage(session: nox.Session) -> None:
     """Run tests and compute coverage of glass."""
-    _setup_tests(session)
+    session.install(*DEPENDENCIES)
+    session.install("-e", "./glass")
     session.run("coverage", "run", "-m", "pytest")
 
 
