@@ -53,6 +53,12 @@ jobs:
       - name: Coveralls requires XML report
         run: coverage xml
 
+      - name: Upload XML as an artefact
+        uses: actions/upload-artifact@v5
+        with:
+          name: coverage-xml-${{ matrix.python-version }}
+          path: coverage.xml
+
       - name: Run Coveralls in parallel
         uses: coverallsapp/github-action@v2
         with:
