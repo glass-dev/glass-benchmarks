@@ -62,7 +62,6 @@ jobs:
       - name: Run Coveralls in parallel
         uses: coverallsapp/github-action@v2
         with:
-          base-path: glass/
           flag-name: run-${{ matrix.python-version }}
           parallel: true
 
