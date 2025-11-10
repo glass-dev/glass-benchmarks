@@ -57,12 +57,8 @@ def benchmark(session: nox.Session) -> None:
 @nox.session(python=ALL_PYTHON)
 def coverage(session: nox.Session) -> None:
     """Run tests and compute coverage of glass."""
-    session.install(*DEPENDENCIES)
-    session.run(
-        "pytest",
-        "--cov=glass",
-        env={"PYTHONPATH": "./glass"}
-    )
+    session.install(*DEPENDENCIES, "./glass")
+    session.run("pytest", "--cov")
 
 
 @nox.session(python=ALL_PYTHON)
