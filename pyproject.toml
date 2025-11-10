@@ -7,7 +7,7 @@ report = {exclude_also = [
 ], skip_covered = false, sort = "cover"}
 run = {branch = true, parallel = false, source_pkgs = [
     "glass",
-]}
+], relative_files = true}
 paths.source = [
     "glass/glass",
     ".nox*/*/lib/python*/site-packages/glass",
