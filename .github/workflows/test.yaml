@@ -63,6 +63,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           base-path: glass
+          debug: true
           flag-name: run-${{ matrix.python-version }}
           parallel: true
 
