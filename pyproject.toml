@@ -7,7 +7,7 @@ report = {exclude_also = [
     "*/noxfile.py",
 ], skip_covered = false, sort = "cover"}
 run = {branch = true, parallel = false, relative_files = true, source = [
-    "glass",
+    "glass/glass",
 ]}
 
 [tool.mypy]
