@@ -66,7 +66,7 @@ def coverage(session: nox.Session) -> None:
     session.run(
         "pytest",
         "--cov",
-        env={"PYTHONPATH": "glass"},
+        env={"PYTHONPATH": "./glass"},
     )
 
 
