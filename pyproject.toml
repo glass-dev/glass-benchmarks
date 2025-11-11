@@ -9,6 +9,7 @@ run = {branch = true, parallel = false, relative_files = true, source_pkgs = [
     "glass",
 ]}
 paths.source = [
+    "glass",
     "glass/glass",
     ".nox*/*/lib/python*/site-packages/glass",
 ]
