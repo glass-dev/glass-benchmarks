@@ -4,6 +4,7 @@ report = {exclude_also = [
     "if TYPE_CHECKING:", # type-checking imports
 ], omit = [
     "*/_version.py",
+    "*/noxfile.py",
 ], skip_covered = false, sort = "cover"}
 run = {branch = true, parallel = false, relative_files = true, source_dirs = [
     "glass/glass",
