@@ -46,27 +46,24 @@ def test_broadcast_leading_axes(xp: ModuleType, benchmark: BenchmarkFixture) -> 
 
 
 @pytest.mark.parametrize(
-    ("x_in", "yq_in", "axis_in", "y_out", "shape_out"),
+    ("x_in", "yq_in", "y_out", "shape_out"),
     [
         # test 1d interpolation
         (
             0.5,
             [1.1, 1.2, 1.3, 1.4, 1.5],
-            -1,
             1.15,
             (),
         ),
         (
             [0.5, 1.5, 2.5],
             [1.1, 1.2, 1.3, 1.4, 1.5],
-            -1,
             [1.15, 1.25, 1.35],
             (3,),
         ),
         (
             [[0.5, 1.5], [2.5, 3.5]],
             [1.1, 1.2, 1.3, 1.4, 1.5],
-            -1,
             [[1.15, 1.25], [1.35, 1.45]],
             (2, 2),
         ),
@@ -74,43 +71,63 @@ def test_broadcast_leading_axes(xp: ModuleType, benchmark: BenchmarkFixture) -> 
         (
             0.5,
             [[1.1, 1.2, 1.3, 1.4, 1.5], [2.1, 2.2, 2.3, 2.4, 2.5]],
-            -1,
             [1.15, 2.15],
             (2,),
         ),
         (
             [0.5, 1.5, 2.5],
             [[1.1, 1.2, 1.3, 1.4, 1.5], [2.1, 2.2, 2.3, 2.4, 2.5]],
-            -1,
             [[1.15, 1.25, 1.35], [2.15, 2.25, 2.35]],
             (2, 3),
         ),
         (
             [[0.5, 1.5], [2.5, 3.5]],
             [[1.1, 1.2, 1.3, 1.4, 1.5], [2.1, 2.2, 2.3, 2.4, 2.5]],
-            -1,
             [[[1.15, 1.25], [1.35, 1.45]], [[2.15, 2.25], [2.35, 2.45]]],
             (2, 2, 2),
         ),
-        # test nd interpolation in middle axis
+    ],
+)
+def test_ndinterp_with_default_axis(  # noqa: PLR0913
+    xp: ModuleType,
+    x_in: int | list[int],
+    yq_in: list[int],
+    y_out: list[int],
+    shape_out: tuple[int, ...],
+    benchmark: BenchmarkFixture,
+) -> None:
+    """Benchmark test for glass.arraytools.ndinterp with the default value for axis."""
+    # test 1d interpolation
+
+    xq = xp.asarray([0, 1, 2, 3, 4])
+    yq = xp.asarray(yq_in)
+
+    x = xp.asarray(x_in)
+    y = benchmark(
+        glass.arraytools.ndinterp,
+        x,
+        xq,
+        yq,
+    )
+    assert y.shape == shape_out
+    np.testing.assert_allclose(y, y_out, atol=1e-15)
+
+
+@pytest.mark.parametrize(
+    ("x_in", "y_out", "shape_out"),
+    [
         (
             0.5,
-            [[[1.1], [1.2], [1.3], [1.4], [1.5]], [[2.1], [2.2], [2.3], [2.4], [2.5]]],
-            1,
             [[1.15], [2.15]],
             (2, 1),
         ),
         (
             [0.5, 1.5, 2.5],
-            [[[1.1], [1.2], [1.3], [1.4], [1.5]], [[2.1], [2.2], [2.3], [2.4], [2.5]]],
-            1,
             [[[1.15], [1.25], [1.35]], [[2.15], [2.25], [2.35]]],
             (2, 3, 1),
         ),
         (
             [[0.5, 1.5, 2.5, 3.5], [3.5, 2.5, 1.5, 0.5], [0.5, 3.5, 1.5, 2.5]],
-            [[[1.1], [1.2], [1.3], [1.4], [1.5]], [[2.1], [2.2], [2.3], [2.4], [2.5]]],
-            1,
             [
                 [
                     [[1.15], [1.25], [1.35], [1.45]],
@@ -127,20 +144,20 @@ def test_broadcast_leading_axes(xp: ModuleType, benchmark: BenchmarkFixture) -> 
         ),
     ],
 )
-def test_ndinterp(  # noqa: PLR0913
+def test_ndinterp_nd_interpolation_in_middle_axis(
     xp: ModuleType,
     x_in: int | list[int],
-    yq_in: list[int],
-    axis_in: int,
     y_out: list[int],
     shape_out: tuple[int, ...],
     benchmark: BenchmarkFixture,
 ) -> None:
-    """Benchmark test for glass.arraytools.ndinterp."""
+    """Benchmark test for glass.arraytools.ndinterp setting axis to 1."""
     # test 1d interpolation
 
     xq = xp.asarray([0, 1, 2, 3, 4])
-    yq = xp.asarray(yq_in)
+    yq = xp.asarray(
+        [[[1.1], [1.2], [1.3], [1.4], [1.5]], [[2.1], [2.2], [2.3], [2.4], [2.5]]]
+    )
 
     x = xp.asarray(x_in)
     y = benchmark(
@@ -148,7 +165,7 @@ def test_ndinterp(  # noqa: PLR0913
         x,
         xq,
         yq,
-        axis=axis_in,
+        axis=1,
     )
     assert y.shape == shape_out
     np.testing.assert_allclose(y, y_out, atol=1e-15)
