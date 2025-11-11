@@ -56,7 +56,7 @@ jobs:
       - name: Fix submodule paths in coverage.xml
         # Use 'sed' (Stream Editor) to perform the find-and-replace
         # It replaces the pattern 'filename="glass/glass/' with 'filename="glass/'
-        run: sed -i -e 's|filename="glass/glass/|filename="glass/|' coverage.xml
+        run: sed -i 's|"glass/glass/|"glass/|g' coverage.xml
 
       - name: Upload XML as an artefact
         uses: actions/upload-artifact@v5
