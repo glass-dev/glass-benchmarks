@@ -50,8 +50,9 @@ jobs:
         env:
           FORCE_COLOR: 1
 
-      - name: Coveralls requires XML report
-        run: coverage xml
+      - name: Generate coverage XML inside glass submodule
+        run: coverage xml -o ../coverage.xml
+        working-directory: glass
 
       - name: Upload XML as an artefact
         uses: actions/upload-artifact@v5
@@ -62,6 +63,7 @@ jobs:
       - name: Run Coveralls in parallel
         uses: coverallsapp/github-action@v2
         with:
+          base-path: glass
           flag-name: run-${{ matrix.python-version }}
           parallel: true
 

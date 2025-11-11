@@ -9,10 +9,6 @@ report = {exclude_also = [
 run = {branch = true, parallel = false, relative_files = true, source = [
     "glass",
 ]}
-paths.source = [
-    "glass",
-    ".nox*/*/lib/python*/site-packages/glass",
-]
 
 [tool.mypy]
 disallow_untyped_decorators = false
