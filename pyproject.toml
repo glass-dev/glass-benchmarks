@@ -6,9 +6,7 @@ report = {exclude_also = [
     "*/_version.py",
     "*/noxfile.py",
 ], skip_covered = false, sort = "cover"}
-run = {branch = true, parallel = false, relative_files = true, source = [
-    "glass/glass",
-]}
+run = {branch = true, parallel = false, relative_files = true}
 
 [tool.mypy]
 disallow_untyped_decorators = false
