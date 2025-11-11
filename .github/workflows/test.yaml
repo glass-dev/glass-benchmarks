@@ -50,6 +50,9 @@ jobs:
         env:
           FORCE_COLOR: 1
 
+      - name: Generate coverage XML
+        run: coverage xml
+
       - name: Upload XML as an artefact
         uses: actions/upload-artifact@v5
         with:
