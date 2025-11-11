@@ -5,11 +5,10 @@ report = {exclude_also = [
 ], omit = [
     "*/_version.py",
 ], skip_covered = false, sort = "cover"}
-run = {branch = true, parallel = false, relative_files = true, source_pkgs = [
-    "glass",
+run = {branch = true, parallel = false, relative_files = true, source_dirs = [
+    "glass/glass",
 ]}
 paths.source = [
-    "glass",
     "glass/glass",
     ".nox*/*/lib/python*/site-packages/glass",
 ]
