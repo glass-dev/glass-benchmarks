@@ -1,0 +1,25 @@
+---
+name: PR Title Checker
+
+on:
+  pull_request_target:
+    types:
+      - edited
+      - labeled
+      - opened
+      - synchronize
+      - unlabeled
+
+jobs:
+  check-pr-title:
+    if: >-
+      github.event.pull_request.user.login != 'allcontributors[bot]' &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'pre-commit-ci[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enforce PR title format
+        uses: thehanimo/pr-title-checker@v1.4.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          pass_on_octokit_error: false

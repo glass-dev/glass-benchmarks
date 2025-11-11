@@ -1,0 +1,86 @@
+---
+name: Release
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+jobs:
+  dist:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v5
+
+      - name: Replace stable version with the release version
+        if: github.event_name == 'release' && github.event.action == 'published'
+        run: |-
+          # store the release tag
+          tag="${{ github.ref_name }}"
+
+          # regex patterns
+          badge_pattern="s#(readthedocs\.org/projects/glass/badge/\?version=)stable#\1${tag}#g"
+          url_pattern="s#(glass\.readthedocs\.io.*?)/stable#\1/${tag}#g"
+
+          # perform the replacements
+          sed --in-place --regexp-extended \
+            --expression "$badge_pattern" \
+            --expression "$url_pattern" \
+            ${{ github.workspace }}/README.md
+
+          # store the tag since the git checkout is now dirty
+          echo "SETUPTOOLS_SCM_PRETEND_VERSION=${tag}" >> "$GITHUB_ENV"
+
+      - uses: hynek/build-and-inspect-python-package@v2
+
+  publish-pypi:
+    if: >-
+      github.event_name == 'release' && github.event.action == 'published'
+    needs: dist
+    runs-on: ubuntu-latest
+    environment:
+      name: publish
+      url: https://pypi.org/project/glass
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v6
+        with:
+          name: Packages
+          path: dist
+
+      - name: List distributions to be deployed
+        run: ls -l dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-test-pypi:
+    if: github.event_name == 'workflow_dispatch'
+    needs: dist
+    runs-on: ubuntu-latest
+    environment:
+      name: test-publish
+      url: https://test.pypi.org/project/glass
+    permissions:
+      id-token: write
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v6
+        with:
+          name: Packages
+          path: dist
+
+      - name: List distributions to be deployed
+        run: ls -l dist/
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/

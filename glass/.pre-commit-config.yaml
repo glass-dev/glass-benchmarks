@@ -1,0 +1,98 @@
+---
+ci:
+  autofix_commit_msg: "pre-commit.ci: style fixes"
+  autofix_prs: false
+  autoupdate_commit_msg: "pre-commit.ci: update pre-commit hooks"
+  autoupdate_schedule: monthly
+
+default_language_version:
+  python: python3.13
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+        args:
+          - --enforce-all
+        exclude: |-
+          (?x)^(
+            docs/_static/.*\.png|
+            examples/.*\.ipynb
+          )$
+      - id: check-case-conflict
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-check-blanket-type-ignore
+      - id: rst-backticks
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+        args:
+          - --strict
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.3
+    hooks:
+      - id: ruff-check
+      - id: ruff-format
+  - repo: https://github.com/adamchainz/blacken-docs
+    rev: 1.20.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black
+  - repo: https://github.com/pappasam/toml-sort
+    rev: v0.24.3
+    hooks:
+      - id: toml-sort-fix
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.6.2
+    hooks:
+      - id: prettier
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint-fix
+        args:
+          - --dot
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: forbid-tabs
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.8
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.18.2
+    hooks:
+      - id: mypy
+        additional_dependencies:
+          - numpy~=2.3.4
+          - jaxtyping~=0.3.3
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+        args:
+          - --keep-output
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+        args:
+          - --external-sources
+          - --shell=bash
