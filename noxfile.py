@@ -19,12 +19,12 @@ DEPENDENCIES = [
     "array-api-compat",
     "array-api-extra",
     "array-api-strict>=2",
+    "coverage",
     "healpix",
     "healpy",
     "jax>=0.4.32",
     "pytest",
     "pytest-benchmark",
-    "pytest-cov",
     "transformcl",
 ]
 GLASS_REPO_URL = "https://github.com/glass-dev/glass"
@@ -64,10 +64,13 @@ def coverage(session: nox.Session) -> None:
     """Run tests and compute coverage of glass."""
     session.install(*DEPENDENCIES)
     session.run(
+        "coverage",
+        "run",
+        "-m",
         "pytest",
-        "--cov=glass",
         env={"PYTHONPATH": "glass"},
     )
+    session.run("coverage", "report")
 
 
 @nox.session(python=ALL_PYTHON)
