@@ -9,15 +9,12 @@ import pytest
 
 import array_api_strict
 
-import glass.jax
+import glass._array_api_utils
 
 if TYPE_CHECKING:
     from types import ModuleType
-    from typing import TypeAlias
 
-    UnifiedGenerator: TypeAlias = (
-        np.random.Generator | glass.jax.Generator | glass._array_api_utils.Generator  # noqa: SLF001
-    )
+    from glass._types import UnifiedGenerator
 
 
 # Change jax logger to only log ERROR or worse
@@ -50,13 +47,4 @@ def urng(xp: ModuleType) -> UnifiedGenerator:
 
     Must be used with the `xp` fixture. Use `rng` for non array API tests.
     """
-    seed = 42
-    backend = xp.__name__
-    if backend == "jax.numpy":
-        return glass.jax.Generator(seed=seed)
-    if backend == "numpy":
-        return np.random.default_rng(seed=seed)
-    if backend == "array_api_strict":
-        return glass._array_api_utils.Generator(seed=seed)  # noqa: SLF001
-    msg = "the array backend in not supported"
-    raise NotImplementedError(msg)
+    return glass._array_api_utils.rng_dispatcher(xp=xp)  # noqa: SLF001
