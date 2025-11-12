@@ -4,7 +4,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import jax.numpy
-import numpy as np
+import numpy  # noqa: ICN001
 import pytest
 
 import array_api_strict
@@ -23,7 +23,7 @@ logging.getLogger("jax").setLevel(logging.ERROR)
 
 xp_available_backends: dict[str, ModuleType] = {
     "array_api_strict": array_api_strict,
-    "numpy": np,
+    "numpy": numpy,
     "jax.numpy": jax.numpy,
 }
 
