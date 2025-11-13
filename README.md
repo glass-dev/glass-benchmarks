@@ -1,3 +1,7 @@
+> [!NOTE]  
+> The benchmarking work has been merged into
+> [glass-dev/glass](https://github.com/glass-dev/glass)
+
 # glass-benchmarks
 
 Benchmarks for [glass-dev/glass](https://github.com/glass-dev/glass).
