@@ -74,23 +74,8 @@ jobs:
           ${{ inputs.starting_revision }} ${{ inputs.end_revision }}
             | tee $REGRESSION_TEST_OUTPUT_FILE
 
-      - name: Extract regression information for PR comment
-        id: extract_comment
-        if: failure()
-        run: >-
-          f=$REGRESSION_TEST_OUTPUT_FILE
-
-          start=$(grep -n -m1 'Performance has regressed:' "$f" | cut -d: -f1)
-            || { echo "No match"; exit 1; }
-          s_dash=$(awk -v n=$start 'NR<=n && /^-+$/ {l=NR} END{print l}' "$f")
-          e_dash=$(awk -v n=$start 'NR>=n && /^-+$/ {print NR; exit}' "$f")
-          PR_COMMENT_MSG=$(sed -n "${s_dash},${e_dash}p" "$f")
-
-          echo "PR_COMMENT_MSG=$PR_COMMENT_MSG" >> $GITHUB_OUTPUT
-
-      - name: Write PR comment
-        uses: mshick/add-pr-comment@v2
-        if: failure()
+      - name: Upload artefact
+        uses: actions/upload-artifact@v5
         with:
-          message: >-
-            ${{ steps.extract_comment.outputs.PR_COMMENT_MSG }}
+          name: regression_output
+          path: $REGRESSION_TEST_OUTPUT_FILE
